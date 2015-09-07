@@ -2,7 +2,7 @@
 
 //VARIABLES
 SET launch_count TO 3.
-SET v_throttle TO 0.3.
+SET v_throttle TO 1.
 SET angle_of_the_dangle TO 90.
 SET let_em_fly TO 0.
 
@@ -26,9 +26,9 @@ FUNCTION steer_it {
 
 FUNCTION throttle_it {
 	PARAMETER howfast.
-	IF (SHIP:SURFACESPEED > howfast AND v_throttle > 0.) {
+	IF (SHIP:SURFACESPEED > howfast AND v_throttle > 0) {
 		SET v_throttle TO v_throttle - 0.5.
-	} ELSE IF v_throttle < 1 {
+	} ELSE IF v_throttle < 1.1 {
 		SET v_throttle TO v_throttle + 0.5.
 	}
 	LOCK THROTTLE TO v_throttle.
@@ -82,13 +82,12 @@ UNTIL SHIP:APOAPSIS > 80000 {
 	UNTIL SHIP:ALTITUDE > 45000 {
 		IF SHIP:SURFACESPEED > 400 {
 				throttle_it((400 + (SHIP:ALTITUDE / 10)) / 3).
-				//PRINT "SURFACE SPEED = " + ROUND(SHIP:SURFACESPEED) + "M/S    LIMIT = " + ROUND((300 + (SHIP:ALTITUDE / 10)) / 3.25) + "M/S".
+				PRINT "SURFACE SPEED = " + ROUND(SHIP:SURFACESPEED) + "M/S    LIMIT = " + ROUND((300 + (SHIP:ALTITUDE / 10)) / 3.25) + "M/S".
 		}
 		steer_it().
 		drop_it_like_it_is_hot().
 		WAIT 0.2.
 	}
-	LOCK THROTTLE TO 1.
 	steer_it().
 	drop_it_like_it_is_hot().
 	WAIT 0.2.
